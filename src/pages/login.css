@@ -80,9 +80,50 @@
     background-color: #000;
     color: white;
 }
-.login-container {
+..phone-login-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh; /* كامل الشاشة */
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
+    background-color: #fff;
+    text-align: center;
+}
+
+.phone-login-title {
+    font-size: 24px;
+    color: #9c4f6b;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.phone-login-input {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.phone-login-button {
+    padding: 10px 20px;
+    background-color: #e06388;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 300px;
+}
+
+.phone-login-button:hover {
+    background-color: #d45078;
 }

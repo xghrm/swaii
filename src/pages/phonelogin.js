@@ -58,30 +58,32 @@ const PhoneLogin = () => {
     };
 
     return (
-        <div className="login-container">
-            <h2>📱 Login with Phone</h2>
+        <div className="phone-login-container">
+            <h2 className="phone-login-title"> 📱 Login with Phone</h2>
 
             <form onSubmit={sendOTP} className="login-form">
                 <input
+                    className="phone-login-input"
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="e.g. +9639xxxxxxx"
                     required
                 />
-                <button type="submit">Send OTP</button>
+                <button type="submit" className="phone-login-button">Send OTP</button>
             </form>
 
             {confirmationResult && (
                 <form onSubmit={verifyOTP} className="login-form">
                     <input
+                        className="phone-login-input"
                         type="text"
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
                         placeholder="Enter OTP"
                         required
                     />
-                    <button type="submit">Verify OTP</button>
+                    <button type="submit" className="phone-login-button">Verify OTP</button>
                 </form>
             )}
 
