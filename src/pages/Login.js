@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import './login.css';
 import {
     signInWithEmailAndPassword,
-    signInWithPopup,
     sendPasswordResetEmail
 } from 'firebase/auth';
-import { auth, googleProvider, db } from '../firebase';
+import { auth, db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
@@ -39,43 +38,6 @@ const Login = () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            await saveUserToDB(user);
-
-            const empDoc = await getDoc(doc(db, "Employee", user.uid));
-            const adminDoc = await getDoc(doc(db, "Admin", user.uid));
-
-            if (adminDoc.exists()) {
-                alert(`✅ Welcome admin: ${user.email}`);
-                navigate("/admin");
-            } else if (empDoc.exists()) {
-                alert(`✅ Welcome employee: ${user.email}`);
-                navigate("/employee");
-            } else {
-                alert(`✅ Logged in as user: ${user.email}`);
-                navigate("/");
-            }
-        } catch (error) {
-            alert(`❌ ${error.message}`);
-        }
-    };
-
-    const loginWithGoogle = async () => {
-        const userAgent = window.navigator.userAgent;
-
-        if (
-            userAgent.includes("Instagram") ||
-            userAgent.includes("FBAN") ||
-            userAgent.includes("FBAV") ||
-            userAgent.includes("TikTok")
-        ) {
-            alert("⚠️ لتسجيل الدخول باستخدام Google، افتحي الموقع من متصفح خارجي مثل Chrome أو Safari.");
-            return;
-        }
-
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
-
             await saveUserToDB(user);
 
             const empDoc = await getDoc(doc(db, "Employee", user.uid));
@@ -160,9 +122,6 @@ const Login = () => {
                 <div className="login-divider">or</div>
 
                 <div className="social-buttons">
-                    <button className="google-btn" onClick={loginWithGoogle}>
-                        🔵 Continue with Google
-                    </button>
                     <button className="phone-btn" onClick={goToPhoneLogin}>
                         📱 Login with Phone
                     </button>
