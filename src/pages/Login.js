@@ -41,35 +41,37 @@ const Login = () => {
             const user = userCredential.user;
             await saveUserToDB(user);
 
-            let isRoleFound = false;
-
             const empDoc = await getDoc(doc(db, "Employee", user.uid));
-            if (empDoc.exists()) {
+            const adminDoc = await getDoc(doc(db, "Admin", user.uid));
+
+            if (adminDoc.exists()) {
+                alert(`✅ Welcome admin: ${user.email}`);
+                navigate("/admin");
+            } else if (empDoc.exists()) {
                 alert(`✅ Welcome employee: ${user.email}`);
                 navigate("/employee");
-                isRoleFound = true;
-            }
-
-            if (!isRoleFound) {
-                const adminDoc = await getDoc(doc(db, "Admin", user.uid));
-                if (adminDoc.exists()) {
-                    alert(`✅ Welcome admin: ${user.email}`);
-                    navigate("/admin");
-                    isRoleFound = true;
-                }
-            }
-
-            if (!isRoleFound) {
+            } else {
                 alert(`✅ Logged in as user: ${user.email}`);
                 navigate("/");
             }
-
         } catch (error) {
             alert(`❌ ${error.message}`);
         }
     };
 
     const loginWithGoogle = async () => {
+        const userAgent = window.navigator.userAgent;
+
+        if (
+            userAgent.includes("Instagram") ||
+            userAgent.includes("FBAN") ||
+            userAgent.includes("FBAV") ||
+            userAgent.includes("TikTok")
+        ) {
+            alert("⚠️ لتسجيل الدخول باستخدام Google، افتحي الموقع من متصفح خارجي مثل Chrome أو Safari.");
+            return;
+        }
+
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
@@ -143,8 +145,8 @@ const Login = () => {
                             style={{ color: 'blue', cursor: 'pointer' }}
                             onClick={() => navigate('/signup')}
                         >
-                            Sign up
-                        </span>
+              Sign up
+            </span>
                     </p>
                     <p
                         onClick={handleResetPassword}
