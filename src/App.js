@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Home from './home/Home';
 import Login from './pages/Login';
 import Restaurants from './pages/Restaurants';
@@ -71,9 +71,9 @@ const AppContent = () => {
 const App = () => (
    < AuthProvider>
      <CartProvider>
-       <BrowserRouter>
+       <HashRouter>
            <AppContent />
-       </BrowserRouter>
+       </HashRouter>
      </CartProvider>
    </AuthProvider>
 );
