@@ -4,7 +4,6 @@ import {
     signInWithEmailAndPassword,
     signInWithRedirect,
     getRedirectResult,
-    onAuthStateChanged,
     sendPasswordResetEmail
 } from 'firebase/auth';
 import { auth, googleProvider, db } from '../firebase';
@@ -42,6 +41,30 @@ const Login = () => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             await saveUserToDB(user);
+
+            let isRoleFound = false;
+
+            const empDoc = await getDoc(doc(db, "Employee", user.uid));
+            if (empDoc.exists()) {
+                alert(`✅ Welcome employee: ${user.email}`);
+                navigate("/employee");
+                isRoleFound = true;
+            }
+
+            if (!isRoleFound) {
+                const adminDoc = await getDoc(doc(db, "Admin", user.uid));
+                if (adminDoc.exists()) {
+                    alert(`✅ Welcome admin: ${user.email}`);
+                    navigate("/admin");
+                    isRoleFound = true;
+                }
+            }
+
+            if (!isRoleFound) {
+                alert(`✅ Logged in as user: ${user.email}`);
+                navigate("/");
+            }
+
         } catch (error) {
             alert(`❌ ${error.message}`);
         }
@@ -55,29 +78,34 @@ const Login = () => {
         }
     };
 
-    // ✅ smart redirect based on user role
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                await saveUserToDB(user);
+        const handleRedirect = async () => {
+            try {
+                const result = await getRedirectResult(auth);
+                if (result) {
+                    const user = result.user;
+                    await saveUserToDB(user);
 
-                const empDoc = await getDoc(doc(db, "Employee", user.uid));
-                const adminDoc = await getDoc(doc(db, "Admin", user.uid));
+                    const empDoc = await getDoc(doc(db, "Employee", user.uid));
+                    const adminDoc = await getDoc(doc(db, "Admin", user.uid));
 
-                if (adminDoc.exists()) {
-                    alert(`✅ Welcome admin: ${user.email}`);
-                    navigate("/admin");
-                } else if (empDoc.exists()) {
-                    alert(`✅ Welcome employee: ${user.email}`);
-                    navigate("/employee");
-                } else {
-                    alert(`✅ Logged in as user: ${user.email}`);
-                    navigate("/");
+                    if (adminDoc.exists()) {
+                        alert(`✅ Welcome admin: ${user.email}`);
+                        navigate("/admin");
+                    } else if (empDoc.exists()) {
+                        alert(`✅ Welcome employee: ${user.email}`);
+                        navigate("/employee");
+                    } else {
+                        alert(`✅ Logged in as user: ${user.email}`);
+                        navigate("/");
+                    }
                 }
+            } catch (error) {
+                console.error("❌ Redirect error:", error.message);
             }
-        });
+        };
 
-        return () => unsubscribe();
+        handleRedirect();
     }, []);
 
     const handleResetPassword = () => {
@@ -129,8 +157,8 @@ const Login = () => {
                             style={{ color: 'blue', cursor: 'pointer' }}
                             onClick={() => navigate('/signup')}
                         >
-              Sign up
-            </span>
+                            Sign up
+                        </span>
                     </p>
                     <p
                         onClick={handleResetPassword}
