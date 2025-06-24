@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { db } from '../firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -12,8 +12,9 @@ const PhoneLogin = () => {
     const auth = getAuth();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        // ✅ تهيئة reCAPTCHA مرة واحدة فقط عند تحميل الصفحة
+    const sendOTP = async (e) => {
+        e.preventDefault();
+
         if (!window.recaptchaVerifier) {
             window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
                 size: 'invisible',
@@ -22,10 +23,6 @@ const PhoneLogin = () => {
                 },
             }, auth);
         }
-    }, [auth]);
-
-    const sendOTP = async (e) => {
-        e.preventDefault();
 
         try {
             const appVerifier = window.recaptchaVerifier;
@@ -62,21 +59,19 @@ const PhoneLogin = () => {
 
     return (
         <div className="phone-login-container">
-            <h2 className="phone-login-title">📱 Login with Phone</h2>
+            <h2 className="phone-login-title"> 📱 Login with Phone</h2>
 
-            {!confirmationResult && (
-                <form onSubmit={sendOTP} className="login-form">
-                    <input
-                        className="phone-login-input"
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="e.g. +9639xxxxxxx"
-                        required
-                    />
-                    <button type="submit" className="phone-login-button">Send OTP</button>
-                </form>
-            )}
+            <form onSubmit={sendOTP} className="login-form">
+                <input
+                    className="phone-login-input"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="e.g. +9639xxxxxxx"
+                    required
+                />
+                <button type="submit" className="phone-login-button">Send OTP</button>
+            </form>
 
             {confirmationResult && (
                 <form onSubmit={verifyOTP} className="login-form">
