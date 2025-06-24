@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './login.css';
 import {
     signInWithEmailAndPassword,
-    signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult,
     sendPasswordResetEmail
 } from 'firebase/auth';
 import { auth, googleProvider, db } from '../firebase';
@@ -71,28 +72,41 @@ const Login = () => {
 
     const loginWithGoogle = async () => {
         try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
-
-            await saveUserToDB(user);
-
-            const empDoc = await getDoc(doc(db, "Employee", user.uid));
-            const adminDoc = await getDoc(doc(db, "Admin", user.uid));
-
-            if (adminDoc.exists()) {
-                alert(`✅ Welcome admin: ${user.email}`);
-                navigate("/admin");
-            } else if (empDoc.exists()) {
-                alert(`✅ Welcome employee: ${user.email}`);
-                navigate("/employee");
-            } else {
-                alert(`✅ Logged in as user: ${user.email}`);
-                navigate("/");
-            }
+            await signInWithRedirect(auth, googleProvider);
         } catch (error) {
             alert(`❌ ${error.message}`);
         }
     };
+
+    useEffect(() => {
+        const handleRedirect = async () => {
+            try {
+                const result = await getRedirectResult(auth);
+                if (result) {
+                    const user = result.user;
+                    await saveUserToDB(user);
+
+                    const empDoc = await getDoc(doc(db, "Employee", user.uid));
+                    const adminDoc = await getDoc(doc(db, "Admin", user.uid));
+
+                    if (adminDoc.exists()) {
+                        alert(`✅ Welcome admin: ${user.email}`);
+                        navigate("/admin");
+                    } else if (empDoc.exists()) {
+                        alert(`✅ Welcome employee: ${user.email}`);
+                        navigate("/employee");
+                    } else {
+                        alert(`✅ Logged in as user: ${user.email}`);
+                        navigate("/");
+                    }
+                }
+            } catch (error) {
+                console.error("❌ Redirect error:", error.message);
+            }
+        };
+
+        handleRedirect();
+    }, []);
 
     const handleResetPassword = () => {
         if (!email) {
