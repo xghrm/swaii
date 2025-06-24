@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { db } from '../firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import './login.css';
 
 const PhoneLogin = () => {
@@ -7,9 +10,11 @@ const PhoneLogin = () => {
     const [otp, setOtp] = useState('');
     const [confirmationResult, setConfirmationResult] = useState(null);
     const auth = getAuth();
+    const navigate = useNavigate();
 
+    const sendOTP = async (e) => {
+        e.preventDefault();
 
-    useEffect(() => {
         if (!window.recaptchaVerifier) {
             window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
                 size: 'invisible',
@@ -18,10 +23,6 @@ const PhoneLogin = () => {
                 },
             }, auth);
         }
-    }, [auth]);
-
-    const sendOTP = async (e) => {
-        e.preventDefault();
 
         try {
             const appVerifier = window.recaptchaVerifier;
@@ -37,7 +38,20 @@ const PhoneLogin = () => {
         e.preventDefault();
         try {
             const result = await confirmationResult.confirm(otp);
-            alert(`✅ Logged in as ${result.user.phoneNumber}`);
+            const user = result.user;
+
+            const userRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            if (!docSnap.exists()) {
+                await setDoc(userRef, {
+                    phoneNumber: user.phoneNumber,
+                    createdAt: new Date(),
+                });
+            }
+
+            alert(`✅ Logged in as ${user.phoneNumber}`);
+            navigate('/');
         } catch (error) {
             alert('❌ Invalid code: ' + error.message);
         }
@@ -46,6 +60,7 @@ const PhoneLogin = () => {
     return (
         <div className="login-container">
             <h2>📱 Login with Phone</h2>
+
             <form onSubmit={sendOTP} className="login-form">
                 <input
                     type="tel"

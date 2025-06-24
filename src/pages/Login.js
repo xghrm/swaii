@@ -3,34 +3,34 @@ import './login.css';
 import {
     signInWithEmailAndPassword,
     signInWithPopup,
-    sendPasswordResetEmail,
+    sendPasswordResetEmail
 } from 'firebase/auth';
 import { auth, googleProvider, db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
-import {doc, getDoc, setDoc} from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+
     const saveUserToDB = async (user) => {
         try {
             const userRef = doc(db, "users", user.uid);
             const userSnap = await getDoc(userRef);
-
             if (!userSnap.exists()) {
                 await setDoc(userRef, {
                     email: user.email || "",
                     phoneNumber: user.phoneNumber || "",
-                    fullName: user.displayName || "", // أو من input إذا عندك اسم
+                    fullName: user.displayName || "",
                     createdAt: new Date(),
                 });
-                console.log("✅ User saved in Firestore");
+                console.log("✅ User saved to Firestore");
             } else {
-                console.log("ℹ️ User already exists in Firestore");
+                console.log("ℹ️ User already exists");
             }
         } catch (error) {
-            console.error("❌ Error saving user to Firestore:", error);
+            console.error("❌ Firestore Error:", error);
         }
     };
 
@@ -40,37 +40,25 @@ const Login = () => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             await saveUserToDB(user);
-            console.log("✅ Logged in UID:", user.uid);
 
             let isRoleFound = false;
 
-            // ✅ Check if Employee
-            try {
-                const empDoc = await getDoc(doc(db, "Employee", user.uid));
-                if (empDoc.exists()) {
-                    alert(`✅ Welcome employee: ${user.email}`);
-                    navigate("/employee");
+            const empDoc = await getDoc(doc(db, "Employee", user.uid));
+            if (empDoc.exists()) {
+                alert(`✅ Welcome employee: ${user.email}`);
+                navigate("/employee");
+                isRoleFound = true;
+            }
+
+            if (!isRoleFound) {
+                const adminDoc = await getDoc(doc(db, "Admin", user.uid));
+                if (adminDoc.exists()) {
+                    alert(`✅ Welcome admin: ${user.email}`);
+                    navigate("/admin");
                     isRoleFound = true;
                 }
-            } catch (err) {
-                console.log("🔍 Not Employee");
             }
 
-            // ✅ Check if Admin
-            if (!isRoleFound) {
-                try {
-                    const adminDoc = await getDoc(doc(db, "Admin", user.uid));
-                    if (adminDoc.exists()) {
-                        alert(`✅ Welcome admin: ${user.email}`);
-                        navigate("/admin");
-                        isRoleFound = true;
-                    }
-                } catch (err) {
-                    console.log("🔍 Not Admin");
-                }
-            }
-
-            // ✅ Otherwise → normal user
             if (!isRoleFound) {
                 alert(`✅ Logged in as user: ${user.email}`);
                 navigate("/");
@@ -85,8 +73,9 @@ const Login = () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
+
             await saveUserToDB(user);
-            const userDoc = await getDoc(doc(db, "users", user.uid));
+
             const empDoc = await getDoc(doc(db, "Employee", user.uid));
             const adminDoc = await getDoc(doc(db, "Admin", user.uid));
 
@@ -97,14 +86,6 @@ const Login = () => {
                 alert(`✅ Welcome employee: ${user.email}`);
                 navigate("/employee");
             } else {
-                // ➕ أول مرة يسجل دخول → نضيفه كمستخدم عادي
-                if (!userDoc.exists()) {
-                    await setDoc(doc(db, "users", user.uid), {
-                        email: user.email,
-                        createdAt: new Date(),
-                    });
-                }
-
                 alert(`✅ Logged in as user: ${user.email}`);
                 navigate("/");
             }
@@ -121,7 +102,7 @@ const Login = () => {
 
         sendPasswordResetEmail(auth, email)
             .then(() => {
-                alert('📩 Password reset link sent to your email.');
+                alert('📩 Password reset email sent.');
                 navigate('/');
             })
             .catch((error) => {
