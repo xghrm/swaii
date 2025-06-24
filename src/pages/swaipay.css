@@ -1,0 +1,58 @@
+.wallet-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 24px;
+    background: #fff7f9;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.wallet-container h2 {
+    color: #d46a92;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.wallet-container p {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.wallet-options {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #555;
+}
+
+.wallet-form {
+    display: flex;
+    flex-direction: column; /* <<< هذا يخلي العناصر تحت بعض */
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.wallet-form input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.wallet-form button {
+    padding: 12px;
+    background-color: #e67fa4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.wallet-form button:hover {
+    background-color: #d46a92;
+}

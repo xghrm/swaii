@@ -1,0 +1,42 @@
+.category-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 12px;
+    margin: 30px auto;
+    padding: 0 16px;
+    overflow-x: auto;
+}
+
+.category-box {
+    flex: 0 0 auto;
+    width: 130px;
+    height: 150px;
+    background-color: #fff;
+    border-radius: 16px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.category-box:hover {
+    transform: translateY(-2px);
+}
+
+.category-img {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    margin-bottom: 6px;
+}
+
+.category-title {
+    font-size: 20px;
+    color: #e8b5aa;
+    font-weight: bold;
+}

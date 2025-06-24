@@ -1,0 +1,55 @@
+.orders-container {
+    max-width: 700px;
+    margin: auto;
+    padding: 24px;
+    background-color: #fff7f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.orders-container h2 {
+    text-align: center;
+    color: #d46a92;
+    margin-bottom: 24px;
+}
+
+.order-card {
+    background-color: #fff;
+    border: 1px solid #f0c6d4;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+
+.order-card p {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.order-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-card li {
+    padding: 6px 0;
+    font-size: 15px;
+    border-bottom: 1px dashed #eee;
+    color: #555;
+}
+.wallet-options {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #555;
+}
+
+.wallet-options input[type="radio"] {
+    margin-right: 6px;
+}

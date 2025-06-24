@@ -1,0 +1,97 @@
+header {
+    background: url("../../assets/header.jpeg") no-repeat right center;
+    background-size: cover;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 25px 0px;
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 0 20px;
+    width: 100%;
+}
+
+header h1 {
+    color: #ffffff;
+    font-size: 50px;
+    font-family: "DM Serif Text", serif;
+    margin: 30px 0px 10px 0px;
+}
+
+header h2 {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+#button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+
+header button {
+    width: 160px;
+    height: 50px;
+    background-color: #ffffff;
+    border: 2px solid #cd6d6d;
+    text-align: center;
+    color: #cd6d6d;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 25px;
+    transition: 0.3s ease;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+header button:hover {
+    background-color: #cd6d6d;
+    color: white;
+}
+
+header button a {
+    color: inherit;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+/* ✅ استجابة للموبايل */
+@media screen and (max-width: 768px) {
+    header {
+        height: auto;
+        padding: 50px 0;
+        background-position: center center;
+        text-align: center;
+    }
+
+    header h1 {
+        font-size: 35px;
+    }
+
+    header h2 {
+        font-size: 18px;
+    }
+
+    header button {
+        width: 140px;
+        height: 45px;
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,88 @@
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #fff7f9;
+}
+
+.login-box {
+    background-color: #ffe0ec;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-header {
+    margin-bottom: 1rem;
+}
+
+.logo-img {
+    width: 60px;
+    margin-bottom: 10px;
+}
+
+.highlight {
+    color: #c94b6a;
+}
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.login-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #e55a7e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.login-divider {
+    margin: 20px 0;
+    font-size: 14px;
+    color: #555;
+}
+.social-buttons{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.social-buttons button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.google-btn {
+    background-color: #4285f4;
+    color: white;
+}
+
+.phone-btn {
+    background-color: #000;
+    color: white;
+}
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* كامل الشاشة */
+}

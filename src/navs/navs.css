@@ -1,0 +1,109 @@
+.nav-container {
+    background-color: #f8f8f8;
+    padding: 8px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin:20px;
+    gap: 15px;
+}
+
+.logo {
+    width: 130px !important;
+    height: auto !important;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #e8b5aa !important;
+    font-size: 25px !important;
+    font-weight: bold;
+}
+
+.nav-links li a:hover {
+    color: #cd6d6d !important;
+}
+
+.sidebar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #cf8888;
+}
+
+/* السايد بار */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 20px;
+    width: 400px;
+    height: 100vh;
+    background: #e69f90;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    z-index: 2000;
+}
+
+.sidebar-links {
+    list-style: none;
+    padding: 0;
+    margin-top: 70px;
+}
+
+.sidebar-links li {
+    margin-bottom: 20px;
+}
+
+.sidebar-links li a {
+    text-decoration: none;
+    color: #e4dabf !important;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.sidebar-links li a:hover {
+    color: #d57d7d;
+}
+
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: #cf8888;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    cursor: pointer;
+}
+
+/* الأزرار */
+button {
+    color: #e69f90;
+    background-color: #ed8282;
+    margin: 50px;
+    border: #cf8888 solid 2px;
+    padding: 1px;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
+    .sidebar-toggle {
+        display: block;
+    }
+}
