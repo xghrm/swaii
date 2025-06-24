@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/swaii/static/css/main.21fa40f7.css",
+    "main.js": "/swaii/static/js/main.d3b5e687.js",
+    "static/media/baitalmashawi.png": "/swaii/static/media/baitalmashawi.20a0cedbc52dbc37ba5b.png",
+    "static/media/anab.png": "/swaii/static/media/anab.6738910c52c31189e172.png",
+    "static/media/Dixy.png": "/swaii/static/media/Dixy.5c56b912386569782cf6.png",
+    "static/media/alnar.png": "/swaii/static/media/alnar.a27e921e77b5e0af320e.png",
+    "static/media/Belagio.png": "/swaii/static/media/Belagio.8d988674830eb59556a9.png",
+    "static/media/messa.png": "/swaii/static/media/messa.3313b7dee8bfc97147fb.png",
+    "static/media/Bab.png": "/swaii/static/media/Bab.5d7c1d0565177cf10077.png",
+    "static/media/divino.png": "/swaii/static/media/divino.9b12358ddd73aa7535e3.png",
+    "static/media/yellow.png": "/swaii/static/media/yellow.26bb83d7cae86533f476.png",
+    "static/media/logo.png": "/swaii/static/media/logo.6a25b047e6796265a2d5.png",
+    "static/media/kasr.jpg": "/swaii/static/media/kasr.46644dadf84a06ae2a6e.jpg",
+    "static/media/malindo.jpg": "/swaii/static/media/malindo.3870bcbb6d6c7680f16f.jpg",
+    "static/media/nahound.jpg": "/swaii/static/media/nahound.ee7902231bdb02a1e3d9.jpg",
+    "static/media/jory.jpg": "/swaii/static/media/jory.22f37b6afefc60a48033.jpg",
+    "static/media/varanda.jpg": "/swaii/static/media/varanda.d50095bbbdb3f73c1d1e.jpg",
+    "static/media/header.jpeg": "/swaii/static/media/header.0f09b33b7a28e3efb995.jpeg",
+    "index.html": "/swaii/index.html",
+    "main.21fa40f7.css.map": "/swaii/static/css/main.21fa40f7.css.map",
+    "main.d3b5e687.js.map": "/swaii/static/js/main.d3b5e687.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.21fa40f7.css",
+    "static/js/main.d3b5e687.js"
+  ]
+}
