@@ -30,6 +30,7 @@ import Employee from "./pages/Employee";
 import Admin from "./pages/Admin";
 import AdminProtectedRoute from "./AdminProtectedRoute";
 import EmployeeProtectedRoute from "./EmployeeProtectedRoute";
+import {ToastContainer} from "react-toastify";
 
 const AppContent = () => {
   const location = useLocation();
@@ -37,6 +38,7 @@ const AppContent = () => {
 
   return (
       <>
+          <ToastContainer/>
         {!hideNav && <Navs />}
         {!hideNav && <Categories />}
         <Routes>
@@ -76,6 +78,7 @@ const App = () => (
        </BrowserRouter>
      </CartProvider>
    </AuthProvider>
+
 );
 
 export default App;

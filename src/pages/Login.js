@@ -7,6 +7,7 @@ import {
 import { auth, db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+import {toast} from "react-toastify";
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -24,12 +25,12 @@ const Login = () => {
                     fullName: user.displayName || "",
                     createdAt: new Date(),
                 });
-                console.log("✅ User saved to Firestore");
+                toast.success("✅ User saved to Firestore");
             } else {
-                console.log("ℹ️ User already exists");
+                toast.warning("ℹ️ User already exists");
             }
         } catch (error) {
-            console.error("❌ Firestore Error:", error);
+            toast.error("❌ Firestore Error:", error);
         }
     };
 
@@ -44,33 +45,33 @@ const Login = () => {
             const adminDoc = await getDoc(doc(db, "Admin", user.uid));
 
             if (adminDoc.exists()) {
-                alert(`✅ Welcome admin: ${user.email}`);
+                toast.success(`✅ Welcome admin: ${user.email}`);
                 navigate("/admin");
             } else if (empDoc.exists()) {
-                alert(`✅ Welcome employee: ${user.email}`);
+                toast.success(`✅ Welcome employee: ${user.email}`);
                 navigate("/employee");
             } else {
-                alert(`✅ Logged in as user: ${user.email}`);
+                toast.success(`✅ Logged in as user: ${user.email}`);
                 navigate("/");
             }
         } catch (error) {
-            alert(`❌ ${error.message}`);
+            toast.error(`❌ ${error.message}`);
         }
     };
 
     const handleResetPassword = () => {
         if (!email) {
-            alert('Please enter your email first.');
+            toast.warning('Please enter your email first.');
             return;
         }
 
         sendPasswordResetEmail(auth, email)
             .then(() => {
-                alert('📩 Password reset email sent.');
+                toast.success('📩 Password reset email sent.');
                 navigate('/');
             })
             .catch((error) => {
-                alert(`❌ ${error.message}`);
+                toast.error(`❌ ${error.message}`);
             });
     };
 

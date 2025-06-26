@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import emailjs from 'emailjs-com';
 import './Account.css';
+import {toast} from "react-toastify";
 
 const ReferFriend = () => {
     const [email, setEmail] = useState('');
@@ -23,10 +24,10 @@ const ReferFriend = () => {
                 templateParams,
                 'wKz241vgk51eUPR4l'
             );
-            setStatus('✅ Invitation sent successfully!');
+            toast.success('✅ Invitation sent successfully!');
             setEmail('');
         } catch (err) {
-            setStatus('❌ Failed to send invitation.');
+            toast.error('❌ Failed to send invitation.');
             console.error(err);
         }
     };

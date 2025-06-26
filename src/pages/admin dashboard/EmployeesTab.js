@@ -9,6 +9,8 @@ import {
     deleteDoc,
     doc,
 } from "firebase/firestore";
+import "./addm.css";
+import { toast } from "react-toastify";
 
 const EmployeesTab = () => {
     const [employees, setEmployees] = useState([]);
@@ -26,69 +28,60 @@ const EmployeesTab = () => {
 
     const handleAdd = async (e) => {
         e.preventDefault();
-        if (!newName || !newEmail) return alert("Please fill in all fields");
+        if (!newName || !newEmail) return toast.error("Please fill in all fields");
         await addDoc(collection(db, "Employee"), { name: newName, email: newEmail });
         setNewName("");
         setNewEmail("");
+        toast.success("✅ Employee added successfully");
         window.location.reload();
     };
 
     const handleDelete = async (id) => {
         await deleteDoc(doc(db, "Employee", id));
         setEmployees((prev) => prev.filter((emp) => emp.id !== id));
+        toast.success("🗑️ Employee deleted");
     };
 
     const handleUpdate = async (id) => {
         const newName = prompt("Enter new name:");
         if (newName) {
             await updateDoc(doc(db, "Employee", id), { name: newName });
+            toast.info("✏️ Name updated");
             window.location.reload();
         }
     };
 
     return (
-        <div>
-            <h3>👨‍💼 Employees Management</h3>
-            <form onSubmit={handleAdd} style={{ marginBottom: "20px" }}>
+        <div className="employees-tab-container">
+            <h3 className="employees-tab-title">👨‍💼 Employees Management</h3>
+            <form onSubmit={handleAdd} className="add-employee-form">
                 <input
                     type="text"
                     placeholder="Name"
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
-                    style={{ marginRight: "10px" }}
                 />
                 <input
                     type="email"
                     placeholder="Email"
                     value={newEmail}
                     onChange={(e) => setNewEmail(e.target.value)}
-                    style={{ marginRight: "10px" }}
                 />
                 <button type="submit">➕ Add Employee</button>
             </form>
 
-            {employees.map((emp) => (
-                <div
-                    key={emp.id}
-                    style={{
-                        padding: "10px",
-                        border: "1px solid #ccc",
-                        borderRadius: "8px",
-                        marginBottom: "10px",
-                    }}
-                >
-                    <p>
-                        <strong>Name:</strong> {emp.name || "N/A"}
-                    </p>
-                    <p>
-                        <strong>Email:</strong> {emp.email || "N/A"}
-                    </p>
-                    <button onClick={() => handleUpdate(emp.id)} style={{ marginRight: "10px" }}>
-                        ✏️ Edit
-                    </button>
-                    <button onClick={() => handleDelete(emp.id)}>🗑️ Delete</button>
-                </div>
-            ))}
+            <div className="employee-list">
+                {employees.map((emp) => (
+                    <div key={emp.id} className="employee-card">
+                        <p><strong>Name:</strong> {emp.name || "N/A"}</p>
+                        <p><strong>Email:</strong> {emp.email || "N/A"}</p>
+                        <div className="employee-actions">
+                            <button onClick={() => handleUpdate(emp.id)} className="edit-btn">✏️ Edit</button>
+                            <button onClick={() => handleDelete(emp.id)} className="delete-btn">🗑️ Delete</button>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

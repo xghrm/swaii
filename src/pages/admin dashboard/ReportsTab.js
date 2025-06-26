@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
+import "./addm.css";
 
 const ReportsTab = () => {
     const [orders, setOrders] = useState([]);
@@ -19,46 +20,50 @@ const ReportsTab = () => {
         fetchOrders();
     }, []);
 
+    const acceptedOrders = orders.filter(order => order.status === "Approved").slice(0, 5);
+    const rejectedOrders = orders.filter(order => order.status === "Rejected").slice(0, 5);
+
     return (
-        <div style={{ padding: "20px" }}>
-            <h2>📊 Reports & Sales Summary</h2>
-            <div style={{ display: "flex", gap: "30px", marginTop: "20px" }}>
-                <div style={cardStyle}>
+        <div className="reports-tab-container">
+            <h2 className="reports-title">📊 Reports & Sales Summary</h2>
+            <div className="summary-cards">
+                <div className="summary-card">
                     <h3>Total Orders</h3>
-                    <p style={numberStyle}>{totalOrders}</p>
+                    <p className="summary-number">{totalOrders}</p>
                 </div>
-                <div style={cardStyle}>
+                <div className="summary-card">
                     <h3>Total Sales</h3>
-                    <p style={numberStyle}>${totalSales.toFixed(2)}</p>
+                    <p className="summary-number">${totalSales.toFixed(2)}</p>
                 </div>
             </div>
-            <h4 style={{ marginTop: "30px" }}>🧾 Recent Orders</h4>
-            <ul>
-                {orders.slice(0, 10).map((order, index) => (
-                    <li key={index}>
-                        {new Date(order.timestamp?.seconds * 1000).toLocaleString()} -
-                        ${Number(order.total || 0).toFixed(2)} - {order.status}
-                    </li>
-                ))}
-            </ul>
+
+            <div className="orders-section">
+                <div className="orders-list approved-orders">
+                    <h4>✅ Approved Orders</h4>
+                    <ul>
+                        {acceptedOrders.map((order, index) => (
+                            <li key={index}>
+                                {new Date(order.timestamp?.seconds * 1000).toLocaleString()} -
+                                ${Number(order.total || 0).toFixed(2)}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div className="orders-list rejected-orders">
+                    <h4>❌ Rejected Orders</h4>
+                    <ul>
+                        {rejectedOrders.map((order, index) => (
+                            <li key={index}>
+                                {new Date(order.timestamp?.seconds * 1000).toLocaleString()} -
+                                ${Number(order.total || 0).toFixed(2)}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
         </div>
     );
-};
-
-const cardStyle = {
-    flex: 1,
-    padding: "20px",
-    border: "1px solid #ddd",
-    borderRadius: "10px",
-    backgroundColor: "#f9f9f9",
-    textAlign: "center",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
-};
-
-const numberStyle = {
-    fontSize: "2rem",
-    fontWeight: "bold",
-    color: "#4caf50"
 };
 
 export default ReportsTab;

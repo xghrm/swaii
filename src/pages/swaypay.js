@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCart } from "./cartcontex"
 import './swaipay.css';
+import {toast} from "react-toastify";
 
 const SwaiPay = () => {
     const { walletBalance, addFunds } = useCart();
@@ -28,7 +29,7 @@ const SwaiPay = () => {
             if (isNaN(num) || num <= 0) return alert("Enter a valid amount.");
 
             addFunds(num);
-            alert(`💳 $${num} added to your wallet.`);
+            toast.warning(`💳 $${num} added to your wallet.`);
             setAmount('');
             setCardNumber('');
             setExpiry('');
@@ -38,10 +39,10 @@ const SwaiPay = () => {
         if (paymentType === 'voucher') {
             if (validVouchers[voucher]) {
                 addFunds(validVouchers[voucher]);
-                alert(`🎉 Voucher applied! $${validVouchers[voucher]} added to your wallet.`);
+                toast.success(`🎉 Voucher applied! $${validVouchers[voucher]} added to your wallet.`);
                 setVoucher('');
             } else {
-                alert("❌ Invalid voucher code.");
+                toast.error("❌ Invalid voucher code.");
             }
         }
     };

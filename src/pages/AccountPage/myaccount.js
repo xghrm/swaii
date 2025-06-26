@@ -3,6 +3,7 @@ import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from "../../firebase.js";
 import './Account.css';
+import {toast} from "react-toastify";
 
 const MyAccount = () => {
     const [user, setUser] = useState(null);
@@ -51,9 +52,9 @@ const MyAccount = () => {
                 phone,
                 address,
             });
-            alert('✅ Info saved successfully!');
+            toast.success('✅ Info saved successfully!');
         } catch (error) {
-            alert('❌ Error saving info: ' + error.message);
+            toast.error('❌ Error saving info: ' + error.message);
         }
     };
 
@@ -61,10 +62,10 @@ const MyAccount = () => {
         const auth = getAuth();
         signOut(auth)
             .then(() => {
-                alert('🚪 Logged out successfully.');
+                toast.success('🚪 Logged out successfully.');
                 window.location.href = '/login';
             })
-            .catch(error => alert('❌ ' + error.message));
+            .catch(error =>toast.error('❌ ' + error.message));
     };
 
     return (

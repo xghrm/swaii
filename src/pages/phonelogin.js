@@ -4,6 +4,7 @@ import { db } from '../firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
+import {toast} from "react-toastify";
 
 const PhoneLogin = () => {
     const [phone, setPhone] = useState('');
@@ -28,9 +29,9 @@ const PhoneLogin = () => {
             const appVerifier = window.recaptchaVerifier;
             const result = await signInWithPhoneNumber(auth, phone, appVerifier);
             setConfirmationResult(result);
-            alert('📲 OTP sent!');
+            toast.success('📲 OTP sent!');
         } catch (error) {
-            alert('❌ ' + error.message);
+            toast.error('❌ ' + error.message);
         }
     };
 
@@ -50,10 +51,10 @@ const PhoneLogin = () => {
                 });
             }
 
-            alert(`✅ Logged in as ${user.phoneNumber}`);
+            toast.success(`✅ Logged in as ${user.phoneNumber}`);
             navigate('/');
         } catch (error) {
-            alert('❌ Invalid code: ' + error.message);
+            toast.error('❌ Invalid code: ' + error.message);
         }
     };
 

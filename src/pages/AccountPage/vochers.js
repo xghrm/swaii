@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Account.css';
+import {toast} from "react-toastify";
 
 const Vouchers = () => {
     const [voucherCode, setVoucherCode] = useState('');
@@ -13,21 +14,21 @@ const Vouchers = () => {
 
     const handleApply = () => {
         if (voucherCode === 'SWAI50') {
-            setMessage('✅ Voucher applied successfully!');
+            toast.success('✅ Voucher applied successfully!');
         } else {
-            setMessage('❌ Invalid voucher code.');
+            toast.error('❌ Invalid voucher code.');
         }
     };
     const sendToFriend = (code) => {
         const email = prompt("Enter your friend's email:");
         if (email && email.includes('@')) {
-            alert(`🎁 Voucher ${code} sent to ${email}`);
+            toast.success(`🎁 Voucher ${code} sent to ${email}`);
         } else {
-            alert("❌ Invalid email.");
+            toast.error("❌ Invalid email.");
         }
     };
     const addToWallet = (code) => {
-        alert(`💰 Voucher ${code} added to your wallet!`);
+        toast.success(`💰 Voucher ${code} added to your wallet!`);
     };
 
 

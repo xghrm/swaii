@@ -1,29 +1,87 @@
-import React, { useState } from 'react';
-import './payment.css';
+import React, { useState, useEffect } from 'react';
 import { useCart } from "./cartcontex";
 import { useNavigate } from 'react-router-dom';
-
+import { getAuth } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '../firebase';
+import { toast } from 'react-toastify';
+import "./payment.css";
 
 const ProcessPayment = () => {
     const [paymentMethod, setPaymentMethod] = useState('credit');
+    const [name, setName] = useState('');
+    const [address, setAddress] = useState('');
+    const [phone, setPhone] = useState('');
+    const [loading, setLoading] = useState(true);
     const { cartItems, placeOrder } = useCart();
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const user = getAuth().currentUser;
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            if (!user) return;
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                const data = userSnap.data();
+                setName(data.name || '');
+                setAddress(data.address || '');
+                setPhone(data.phone || '');
+            }
+            setLoading(false);
+        };
+        fetchUserInfo();
+    }, [user]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (cartItems.length === 0) {
-            alert('🛒 Your cart is empty. Please add items before paying.');
+
+        if (!name || !address || !phone) {
+            toast.error("❌ Please fill in all required details.");
             return;
         }
-        placeOrder();
-        alert(`✅ Payment method selected: ${paymentMethod}\nYour order has been placed!`);
-        navigate('/orders');
+
+        if (cartItems.length === 0) {
+            toast.error('🛒 Your cart is empty.');
+            return;
+        }
+
+        try {
+            // Update user info in Firestore
+            const userRef = doc(db, "users", user.uid);
+            await setDoc(userRef, {
+                name,
+                address,
+                phone,
+                email: user.email
+            }, { merge: true });
+
+            placeOrder(); // placeOrder should include name, address, phone when saving
+            toast.success("✅ Order placed successfully!");
+            navigate('/orders');
+        } catch (error) {
+            toast.error(`❌ ${error.message}`);
+        }
     };
+
+    if (loading) return <p>Loading...</p>;
 
     return (
         <div className="payment-container">
             <h2>🧾 Process Your Payment</h2>
             <form onSubmit={handleSubmit}>
+                <div className="user-details">
+                    <label>Full Name</label>
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+
+                    <label>Phone Number</label>
+                    <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+
+                    <label>Address</label>
+                    <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} required />
+                </div>
+
                 <div className="payment-method">
                     <label>
                         <input
@@ -34,7 +92,6 @@ const ProcessPayment = () => {
                         />
                         Credit Card
                     </label>
-
                     <label>
                         <input
                             type="radio"
@@ -54,7 +111,7 @@ const ProcessPayment = () => {
                     </div>
                 )}
 
-                <button onClick={placeOrder} className="confirm-btn">ConfirmPayment</button>
+                <button type="submit" className="confirm-btn">Confirm Payment</button>
             </form>
 
             <div className="cart-summary">

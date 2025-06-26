@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import { db, auth } from '../firebase';
 import { collection, addDoc, Timestamp, getDoc, doc } from 'firebase/firestore';
+import {toast} from "react-toastify";
 
 const CartContext = createContext();
 
@@ -55,7 +56,7 @@ export const CartProvider = ({ children }) => {
     const placeOrder = async () => {
         const user = auth.currentUser;
         if (!user) {
-            alert("❌ Please log in first.");
+            toast.error("❌ Please log in first.");
             return;
         }
 
@@ -75,10 +76,10 @@ export const CartProvider = ({ children }) => {
                 address: userData.address || ""
             });
 
-            alert("✅ Order placed!");
+            toast.success("✅ Order placed!");
             setCartItems([]); // تفريغ السلة بعد الطلب
         } catch (error) {
-            alert(`❌ Error placing order: ${error.message}`);
+            toast.error(`❌ Error placing order: ${error.message}`);
         }
     };
 

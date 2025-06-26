@@ -7,6 +7,7 @@ import {
     deleteDoc,
     doc,
 } from "firebase/firestore";
+import "./addm.css";
 
 const CategoriesTab = () => {
     const [categories, setCategories] = useState([]);
@@ -44,36 +45,29 @@ const CategoriesTab = () => {
     };
 
     return (
-        <div>
-            <h2 style={{ color: "#d68a8a" }}>Manage Categories & Offers</h2>
-            <form onSubmit={handleAdd} style={{ marginBottom: "20px" }}>
+        <div className="categories-tab-container">
+            <h2 className="categories-tab-title">🍽️ Manage Categories & Offers</h2>
+            <form onSubmit={handleAdd} className="add-category-form">
                 <input
                     type="text"
                     placeholder="Category Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    style={{ marginRight: "10px" }}
                 />
                 <input
                     type="text"
                     placeholder="Offer Details"
                     value={offer}
                     onChange={(e) => setOffer(e.target.value)}
-                    style={{ marginRight: "10px" }}
                 />
                 <button type="submit">➕ Add Category</button>
             </form>
 
-            <ul>
+            <ul className="category-list">
                 {categories.map((cat) => (
-                    <li key={cat.id} style={{ marginBottom: "10px" }}>
-                        <strong>{cat.name}</strong>: {cat.offer}
-                        <button
-                            onClick={() => handleDelete(cat.id)}
-                            style={{ marginLeft: "10px", color: "red" }}
-                        >
-                            🗑️ Delete
-                        </button>
+                    <li key={cat.id} className="category-item">
+                        <span><strong>{cat.name}</strong>: {cat.offer}</span>
+                        <button onClick={() => handleDelete(cat.id)} className="delete-btn">🗑️ Delete</button>
                     </li>
                 ))}
             </ul>

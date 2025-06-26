@@ -8,6 +8,8 @@ import {
     deleteDoc,
     updateDoc
 } from "firebase/firestore";
+import "./addm.css"; // تأكد من استيراد ملف الـ CSS
+import { toast } from "react-toastify";
 
 const UsersTab = () => {
     const [users, setUsers] = useState([]);
@@ -28,33 +30,30 @@ const UsersTab = () => {
     const handleDelete = async (id) => {
         await deleteDoc(doc(db, "users", id));
         setUsers((prev) => prev.filter((u) => u.id !== id));
+        toast.success("🗑️ User deleted successfully.");
     };
 
     const handleSuspend = async (id) => {
-        await updateDoc(doc(db, "users", id), {
-            suspended: true,
-        });
-        alert("User suspended.");
+        await updateDoc(doc(db, "users", id), { suspended: true });
+        toast.warning("🚫 User suspended.");
     };
 
     return (
-        <div>
-            <h3 style={{ marginBottom: '1rem' }}>👥 Users List</h3>
-            <div style={{ display: 'grid', gap: '10px' }}>
+        <div className="users-tab-container">
+            <h3 className="users-tab-title">👥 Users List</h3>
+            <div className="users-grid">
                 {users.map((user) => (
-                    <div key={user.id} style={{
-                        border: '1px solid #ccc',
-                        borderRadius: '10px',
-                        padding: '15px',
-                        backgroundColor: user.suspended ? '#ffe6e6' : '#f9f9f9'
-                    }}>
+                    <div
+                        key={user.id}
+                        className={`user-card ${user.suspended ? "suspended" : ""}`}
+                    >
                         <p><strong>Name:</strong> {user.name || "N/A"}</p>
                         <p><strong>Email:</strong> {user.email || "N/A"}</p>
-                        <div style={{ marginTop: '10px' }}>
-                            <button onClick={() => handleDelete(user.id)} style={{ marginRight: '10px', background: '#dc3545', color: 'white', border: 'none', padding: '5px 10px' }}>
+                        <div className="user-actions">
+                            <button className="delete-btn" onClick={() => handleDelete(user.id)}>
                                 🗑️ Delete
                             </button>
-                            <button onClick={() => handleSuspend(user.id)} style={{ background: '#ffc107', color: 'black', border: 'none', padding: '5px 10px' }}>
+                            <button className="suspend-btn" onClick={() => handleSuspend(user.id)}>
                                 🚫 Suspend
                             </button>
                         </div>

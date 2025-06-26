@@ -1,32 +1,42 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
-import './login.css';
+import { auth, db } from '../firebase';
+import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import './login.css';
+import {toast} from "react-toastify";
 
 const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSignup = (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
-        createUserWithEmailAndPassword(auth, email, password)
-            .then(userCredential => {
-                alert('✅ Account created successfully!');
-                navigate('/'); // بعدها يدخل عالهوم أو وين ما بدك
-            })
-            .catch(error => {
-                alert(`❌ ${error.message}`);
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // 📝 حفظ بيانات المستخدم في Firestore
+            await setDoc(doc(db, "users", user.uid), {
+                email: user.email,
+                createdAt: new Date(),
             });
+
+            toast.success('✅ Account created and saved!');
+            navigate('/');
+        } catch (error) {
+            toast.error(`❌ ${error.message}`);
+        }
     };
 
     return (
-        <div className="login-container">
+        <div className="sighup-login-container">
             <div className="login-box">
-                <h2> Create a SWAI Account</h2>
+                <h2 className="signup-login-title"> Create a SWAI Account</h2>
                 <form onSubmit={handleSignup} className="login-form">
                     <input
+                        className="sighup-login-input"
                         type="email"
                         placeholder="Email address"
                         value={email}
@@ -34,17 +44,17 @@ const Signup = () => {
                         required
                     />
                     <input
+                        className="sighup-login-input"
                         type="password"
                         placeholder="Password (min 6 chars)"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button type="submit">Create Account</button>
+                    <button type="submit" className="sighup-login-button">Create Account</button>
                 </form>
             </div>
         </div>
-
     );
 };
 
