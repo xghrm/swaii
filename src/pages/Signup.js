@@ -4,7 +4,7 @@ import { auth, db } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
@@ -17,7 +17,7 @@ const Signup = () => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // 📝 حفظ بيانات المستخدم في Firestore
+            // 📝 Save user data to Firestore
             await setDoc(doc(db, "users", user.uid), {
                 email: user.email,
                 createdAt: new Date(),
@@ -26,14 +26,18 @@ const Signup = () => {
             toast.success('✅ Account created and saved!');
             navigate('/');
         } catch (error) {
-            toast.error(`❌ ${error.message}`);
+            if (error.code === "auth/email-already-in-use") {
+                toast.warn("⚠️ Email already exists. Please login instead.");
+            } else {
+                toast.error(`❌ ${error.message}`);
+            }
         }
     };
 
     return (
         <div className="sighup-login-container">
             <div className="login-box">
-                <h2 className="signup-login-title"> Create a SWAI Account</h2>
+                <h2 className="signup-login-title">Create a SWAI Account</h2>
                 <form onSubmit={handleSignup} className="login-form">
                     <input
                         className="sighup-login-input"

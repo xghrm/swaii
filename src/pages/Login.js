@@ -26,8 +26,7 @@ const Login = () => {
                     createdAt: new Date(),
                 });
                 toast.success("✅ User saved to Firestore");
-            } else {
-                toast.warning("ℹ️ User already exists");
+
             }
         } catch (error) {
             toast.error("❌ Firestore Error:", error);
@@ -108,7 +107,7 @@ const Login = () => {
                             style={{ color: 'blue', cursor: 'pointer' }}
                             onClick={() => navigate('/signup')}
                         >
-              Sign up
+              Sign in
             </span>
                     </p>
                     <p
