@@ -5,19 +5,21 @@ import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 import { toast } from 'react-toastify';
+import CircularProgress from '@mui/material/CircularProgress'; // استيراد العنصر
 
 const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false); // حالة التحميل
     const navigate = useNavigate();
 
     const handleSignup = async (e) => {
         e.preventDefault();
+        setLoading(true); // بدء التحميل
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // 📝 Save user data to Firestore
             await setDoc(doc(db, "users", user.uid), {
                 email: user.email,
                 createdAt: new Date(),
@@ -31,6 +33,8 @@ const Signup = () => {
             } else {
                 toast.error(`❌ ${error.message}`);
             }
+        } finally {
+            setLoading(false); // إيقاف التحميل بعد العملية
         }
     };
 
@@ -55,7 +59,9 @@ const Signup = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button type="submit" className="sighup-login-button">Create Account</button>
+                    <button type="submit" className="sighup-login-button" disabled={loading}>
+                        {loading ? <CircularProgress size={24} color="inherit" /> : "Create Account"}
+                    </button>
                 </form>
             </div>
         </div>

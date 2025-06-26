@@ -107,3 +107,17 @@ button {
         display: block;
     }
 }
+.cart-icon{
+    display: none;
+    color: #e8b5aa !important;
+    font-size: 25px !important;
+    margin-right: 10px;
+    padding-right: 15px;
+    cursor: pointer;
+
+}
+@media (max-width: 768px) {
+    .cart-icon{
+        display: block;
+    }
+}

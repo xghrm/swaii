@@ -48,7 +48,6 @@ const ProcessPayment = () => {
         }
 
         try {
-            // Update user info in Firestore
             const userRef = doc(db, "users", user.uid);
             await setDoc(userRef, {
                 name,
@@ -57,7 +56,7 @@ const ProcessPayment = () => {
                 email: user.email
             }, { merge: true });
 
-            placeOrder(); // placeOrder should include name, address, phone when saving
+            placeOrder();
             toast.success("✅ Order placed successfully!");
             navigate('/orders');
         } catch (error) {
@@ -66,6 +65,8 @@ const ProcessPayment = () => {
     };
 
     if (loading) return <p>Loading...</p>;
+
+    const total = cartItems.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0).toFixed(2);
 
     return (
         <div className="payment-container">
@@ -118,9 +119,12 @@ const ProcessPayment = () => {
                 <h3>🛒 Cart Summary</h3>
                 <ul>
                     {cartItems.map((item, index) => (
-                        <li key={index}>{item.name} - ${item.price} x {item.quantity || 1}</li>
+                        <li key={index}>
+                            {item.name} - ${item.price} x {item.quantity || 1}
+                        </li>
                     ))}
                 </ul>
+                <p><strong>Total: ${total}</strong></p>
             </div>
         </div>
     );

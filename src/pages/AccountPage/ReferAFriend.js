@@ -12,6 +12,7 @@ const ReferFriend = () => {
 
         const templateParams = {
             to_email: email,
+            cc:'',
             from_name: "SWAI App",
 
             message: "👋 Hey! Join SWAI and enjoy delicious meals delivered fast! 🚀"

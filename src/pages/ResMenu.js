@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useCart } from './cartcontex';
 import CartButton  from "./cartbutton.js";
 import './res.css';
+import {toast} from "react-toastify";
 
 const menuData = {
     "Divino Restaurant": [
@@ -94,7 +95,10 @@ const RestaurantMenu = () => {
                         <p>{description}</p>
                         <button
                             className="add-btn"
-                            onClick={() => addToCart({name: itemName, price, image, quantity: 1})}
+                            onClick={() => {
+                                addToCart({name: itemName, price, image, quantity: 1});
+                            toast.success("Item added successfully!");
+                        }}
                         >
                             ➕ Add
                         </button>

@@ -7,11 +7,13 @@ import {
 import { auth, db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
+import CircularProgress from '@mui/material/CircularProgress'; // ✅ استيراد مؤشر التحميل
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false); // ✅ حالة التحميل
     const navigate = useNavigate();
 
     const saveUserToDB = async (user) => {
@@ -26,15 +28,15 @@ const Login = () => {
                     createdAt: new Date(),
                 });
                 toast.success("✅ User saved to Firestore");
-
             }
         } catch (error) {
-            toast.error("❌ Firestore Error:", error);
+            toast.error(`❌ Firestore Error: ${error.message}`);
         }
     };
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setLoading(true); // ✅ بدء التحميل
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -55,6 +57,8 @@ const Login = () => {
             }
         } catch (error) {
             toast.error(`❌ ${error.message}`);
+        } finally {
+            setLoading(false); // ✅ إيقاف التحميل
         }
     };
 
@@ -107,16 +111,23 @@ const Login = () => {
                             style={{ color: 'blue', cursor: 'pointer' }}
                             onClick={() => navigate('/signup')}
                         >
-              Sign in
-            </span>
+                            Sign in
+                        </span>
                     </p>
                     <p
                         onClick={handleResetPassword}
-                        style={{ color: '#4285f4', cursor: 'pointer', textAlign: 'center', marginTop: '10px' }}
+                        style={{
+                            color: '#4285f4',
+                            cursor: 'pointer',
+                            textAlign: 'center',
+                            marginTop: '10px'
+                        }}
                     >
                         Forgot Password?
                     </p>
-                    <button type="submit">Login</button>
+                    <button type="submit" disabled={loading}>
+                        {loading ? <CircularProgress size={22} color="inherit" /> : "Login"}
+                    </button>
                 </form>
 
                 <div className="login-divider">or</div>

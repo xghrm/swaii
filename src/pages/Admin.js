@@ -3,9 +3,8 @@ import { Tabs, Tab } from "@mui/material";
 import DashboardTab from "./admin dashboard/dashboard";
 import UsersTab from "./admin dashboard/UsersTab";
 import EmployeesTab from "./admin dashboard/EmployeesTab";
-import CategoriesTab from "./admin dashboard/CategoriesTab";
 import ReportsTab from "./admin dashboard/ReportsTab";
-import RestaurantTab from "./admin dashboard/reastaurants";
+import CategoriesTab from "./admin dashboard/CategoriesTab.js";
 import Logo from "../assets/logo.png";
 
 const AdminDashboard = () => {
@@ -26,18 +25,16 @@ const AdminDashboard = () => {
                 <Tab label="Dashboard" />
                 <Tab label="Users" />
                 <Tab label="Employees" />
-                <Tab label="Categories & Offers" />
                 <Tab label="Reports & Sales" />
-                <Tab label="Restaurants & More" />
+                <Tab label="Categories" />
             </Tabs>
 
             <div style={{ marginTop: '30px' }}>
                 {tabIndex === 0 && <DashboardTab />}
                 {tabIndex === 1 && <UsersTab />}
                 {tabIndex === 2 && <EmployeesTab />}
-                {tabIndex === 3 && <CategoriesTab />}
-                {tabIndex === 4 && <ReportsTab />}
-                {tabIndex === 5 && <RestaurantTab />}
+                {tabIndex === 3 && <ReportsTab />}
+                {tabIndex === 4 && <CategoriesTab />}
             </div>
         </div>
     );

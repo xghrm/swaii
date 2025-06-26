@@ -1,78 +1,95 @@
-import React, { useState, useEffect } from "react";
-import { db } from "../../firebase";
-import {
-    collection,
-    addDoc,
-    getDocs,
-    deleteDoc,
-    doc,
-} from "firebase/firestore";
-import "./addm.css";
+// RestaurantTab.jsx
+import React, { useEffect, useState } from 'react';
+import { db } from '../../firebase';
+import { collection, addDoc, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
-const CategoriesTab = () => {
-    const [categories, setCategories] = useState([]);
-    const [name, setName] = useState("");
-    const [offer, setOffer] = useState("");
+const RestaurantTab = () => {
+    const [restaurants, setRestaurants] = useState([]);
+    const [name, setName] = useState('');
+    const [image, setImage] = useState('');
+    const [rating, setRating] = useState('');
+    const [category, setCategory] = useState('restaurant');
+    const navigate = useNavigate();
+
+    const categoriesMap = {
+        restaurant: 'restaurants',
+        cafe: 'cafees',
+        grocery: 'groceries'
+    };
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            const snapshot = await getDocs(collection(db, "categories"));
-            const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-            setCategories(data);
+        const fetchData = async () => {
+            const data = {};
+            for (const key in categoriesMap) {
+                const snapshot = await getDocs(collection(db, categoriesMap[key]));
+                data[key] = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+            }
+            setRestaurants(data);
         };
-
-        fetchCategories();
+        fetchData();
     }, []);
 
-    const handleAdd = async (e) => {
+    const handleAddRestaurant = async (e) => {
         e.preventDefault();
-        if (!name || !offer) return alert("Please fill all fields");
+        if (!name || !image || !rating || !category) return alert("Please fill all fields");
         try {
-            await addDoc(collection(db, "categories"), { name, offer });
-            alert("✅ Category added!");
-            setName("");
-            setOffer("");
+            await addDoc(collection(db, categoriesMap[category]), {
+                name,
+                image,
+                rating: parseFloat(rating),
+                createdAt: new Date()
+            });
             window.location.reload();
-        } catch (error) {
-            console.error("Error adding category:", error);
-            alert("❌ Failed to add category");
+        } catch (err) {
+            alert("Error adding: " + err.message);
         }
     };
 
-    const handleDelete = async (id) => {
-        await deleteDoc(doc(db, "categories", id));
-        setCategories((prev) => prev.filter((c) => c.id !== id));
+    const handleDelete = async (id, category) => {
+        await deleteDoc(doc(db, categoriesMap[category], id));
+        setRestaurants((prev) => ({
+            ...prev,
+            [category]: prev[category].filter((r) => r.id !== id)
+        }));
     };
 
-    return (
-        <div className="categories-tab-container">
-            <h2 className="categories-tab-title">🍽️ Manage Categories & Offers</h2>
-            <form onSubmit={handleAdd} className="add-category-form">
-                <input
-                    type="text"
-                    placeholder="Category Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Offer Details"
-                    value={offer}
-                    onChange={(e) => setOffer(e.target.value)}
-                />
-                <button type="submit">➕ Add Category</button>
-            </form>
-
-            <ul className="category-list">
-                {categories.map((cat) => (
-                    <li key={cat.id} className="category-item">
-                        <span><strong>{cat.name}</strong>: {cat.offer}</span>
-                        <button onClick={() => handleDelete(cat.id)} className="delete-btn">🗑️ Delete</button>
-                    </li>
+    const renderCategory = (title, items, categoryKey) => (
+        <div>
+            <h3>{title} ({items.length})</h3>
+            <div className="restaurant-grid">
+                {items.map((res) => (
+                    <div className="restaurant-card" key={res.id}>
+                        <img src={res.image} alt={res.name} />
+                        <h4>{res.name}</h4>
+                        <p>⭐ {res.rating}</p>
+                        <button onClick={() => navigate(`/admin/${categoryKey}/${res.id}`)}>➕ Add Item</button>
+                        <button onClick={() => handleDelete(res.id, categoryKey)}>🗑️ Delete</button>
+                    </div>
                 ))}
-            </ul>
+            </div>
+        </div>
+    );
+
+    return (
+        <div className="restaurant-tab-container">
+            <h2>Manage Restaurants / Cafes / Groceries</h2>
+            <form onSubmit={handleAddRestaurant} className="add-form">
+                <input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+                <input placeholder="Image URL" value={image} onChange={(e) => setImage(e.target.value)} required />
+                <input placeholder="Rating (0-5)" type="number" step="0.1" value={rating} onChange={(e) => setRating(e.target.value)} required />
+                <select value={category} onChange={(e) => setCategory(e.target.value)}>
+                    <option value="restaurant">Restaurant</option>
+                    <option value="cafe">Cafe</option>
+                    <option value="grocery">Grocery</option>
+                </select>
+                <button type="submit">➕ Add</button>
+            </form>
+            {restaurants.restaurant && renderCategory("Restaurants", restaurants.restaurant, 'restaurant')}
+            {restaurants.cafe && renderCategory("Cafes", restaurants.cafe, 'cafe')}
+            {restaurants.grocery && renderCategory("Groceries", restaurants.grocery, 'grocery')}
         </div>
     );
 };
 
-export default CategoriesTab;
+export default RestaurantTab;

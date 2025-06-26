@@ -2,6 +2,7 @@ import React from 'react';
 import { useCart } from './cartcontex';
 import './cart.css';
 import { useNavigate } from 'react-router-dom';
+import {toast} from "react-toastify";
 
 
 const Cart = () => {
@@ -24,12 +25,24 @@ const Cart = () => {
                                 <h4>{item.name}</h4>
                                 <p>${item.price.toFixed(2)}</p>
                                 <div className="quantity-controls">
-                                    <button onClick={() => decreaseQuantity(item.name)}>-</button>
+                                    <button onClick={() => {
+                                        decreaseQuantity(item.name);
+                                        toast.info(`${item.name} Decreased from cart`);
+                                    }}>
+                                        -</button>
                                     <span>{item.quantity}</span>
-                                    <button onClick={() => increaseQuantity(item.name)}>+</button>
+                                    <button onClick={() => {
+                                        increaseQuantity(item.name);
+                                        toast.info(`${item.name} Increased from cart`)
+                                    }}>
+                                        +</button>
                                 </div>
                             </div>
-                            <button className="remove-btn" onClick={() => removeFromCart(item.name)}>🗑️</button>
+                            <button className="remove-btn" onClick={() => {
+                                removeFromCart(item.name);
+                                toast.info(`${item.name} removed from cart`);
+                            }}>
+                                🗑️</button>
                         </div>
                     ))}
                 </div>
@@ -38,7 +51,10 @@ const Cart = () => {
             {cartItems.length > 0 && (
                 <div className="checkout">
                     <p>Total: ${totalPrice.toFixed(2)}</p>
-                    <button className="process-btn" onClick={() => navigate("/process-payment")}>
+                    <button className="process-btn" onClick={() =>{
+                        navigate("/process-payment");
+                        toast.success("Redirecting to payment...");
+                    }}>
                         Process Payment
                     </button>
                 </div>

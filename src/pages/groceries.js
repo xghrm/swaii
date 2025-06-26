@@ -3,6 +3,7 @@ import React from 'react';
 import { useCart } from './cartcontex';
 import CartButton from './cartbutton';
 import './res.css';
+import {toast} from "react-toastify";
 
 const groceries = [
     ["Milk", 2, "milk.png", "Fresh cow milk 1L"],
@@ -36,7 +37,11 @@ const Groceries = () => {
                         />
                         <h4>{name} - ${price}</h4>
                         <p>{description}</p>
-                        <button className="add-btn" onClick={() => addToCart({ name, price, image })}>➕ Add</button>
+                        <button className="add-btn" onClick={() => {
+                            addToCart({ name, price, image });
+                            toast.success("Item added successfully!");
+                        }}>
+                            ➕ Add</button>
                     </div>
                 ))}
             </div>
