@@ -122,11 +122,110 @@ h2 {
     margin-top: 20px;
 }
 .employee-dashboard {
-    max-width: 900px;
-    margin: auto;
     padding: 20px;
 }
 
+h1 {
+    margin-bottom: 20px;
+}
+.tabs {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0; /* يضمن أنه مافي فراغ */
+    margin-bottom: 20px;
+    flex-wrap: nowrap;
+}
+
+.tabs button {
+    padding: 10px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #d81b60;
+    cursor: pointer;
+    margin: 0;      /* ممنوع المارجن */
+    border-radius: 0;
+}
+
+.tabs button.active {
+    background-color: #d81b60;
+    color: white;
+}
+
+.tabs button:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.tabs button:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+.tabs button:hover {
+    background-color: #ccc;
+}
+
+.tabs button.active-tab {
+    background-color: #4caf50;
+    color: white;
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+.order-card {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.order-actions {
+    margin-top: 10px;
+}
+
+.approve-btn, .reject-btn {
+    padding: 8px 16px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.approve-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+.reject-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    .tabs button {
+        font-size: 1rem;
+        padding: 10px 16px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tabs button {
+        font-size: 0.9rem;
+    }
+
+}
 .order-card {
     background: #fff;
     border: 1px solid #ddd;
@@ -135,32 +234,3 @@ h2 {
     border-radius: 8px;
 }
 
-.order-card p {
-    margin: 6px 0;
-}
-
-.order-card ul {
-    padding-left: 20px;
-}
-
-.order-actions {
-    margin-top: 10px;
-}
-
-.approve-btn,
-.reject-btn {
-    padding: 8px 16px;
-    border: none;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-.approve-btn {
-    background-color: #4caf50;
-}
-
-.reject-btn {
-    background-color: #f44336;
-}

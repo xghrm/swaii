@@ -111,7 +111,7 @@ const Login = () => {
                             style={{ color: 'blue', cursor: 'pointer' }}
                             onClick={() => navigate('/signup')}
                         >
-                            Sign in
+                            Sign up
                         </span>
                     </p>
                     <p
